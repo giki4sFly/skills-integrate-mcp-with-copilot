@@ -14,3 +14,8 @@ Remember, it's self-paced so feel free to take a break! ☕️
 
 &copy; 2025 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
 
+Environment
+-
+Copy `.env.example` to `.env` and fill in any required values (database connection, JWT secret, etc.) before running the application. The project `.gitignore` already excludes `.env` so secrets should not be committed.
+
+
