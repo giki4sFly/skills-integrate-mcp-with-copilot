@@ -66,26 +66,42 @@ document.addEventListener("DOMContentLoaded", () => {
       const spotsLeft =
         details.max_participants - details.participants.length;
 
+      const escapeHtml = (value) =>
+        String(value).replace(/[&<>"']/g, (ch) =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          })[ch]
+        );
+
+      const safeName = escapeHtml(name);
+      const safeCategory = escapeHtml(details.category);
+      const safeDescription = escapeHtml(details.description);
+      const safeSchedule = escapeHtml(details.schedule);
+
       const participantsHTML =
         details.participants.length > 0
           ? `<div class="participants-section">
             <h5>Participants:</h5>
             <ul class="participants-list">
               ${details.participants
-                .map(
-                  (email) =>
-                    `<li><span class="participant-email">${email}</span><button class="delete-btn" data-activity="${name}" data-email="${email}">❌</button></li>`
-                )
+                .map((email) => {
+                  const safeEmail = escapeHtml(email);
+                  return `<li><span class="participant-email">${safeEmail}</span><button class="delete-btn" data-activity="${safeName}" data-email="${safeEmail}">❌</button></li>`;
+                })
                 .join("")}
             </ul>
           </div>`
           : `<p><em>No participants yet</em></p>`;
 
       activityCard.innerHTML = `
-        <h4>${name}</h4>
-        <p><strong>Category:</strong> ${details.category}</p>
-        <p>${details.description}</p>
-        <p><strong>Schedule:</strong> ${details.schedule}</p>
+        <h4>${safeName}</h4>
+        <p><strong>Category:</strong> ${safeCategory}</p>
+        <p>${safeDescription}</p>
+        <p><strong>Schedule:</strong> ${safeSchedule}</p>
         <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
         <div class="participants-container">
           ${participantsHTML}
