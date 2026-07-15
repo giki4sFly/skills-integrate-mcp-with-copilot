@@ -29,22 +29,23 @@ document.addEventListener("DOMContentLoaded", () => {
       return matchesSearch && matchesCategory;
     });
     
-    // Sort activities
-    filtered.sort(([nameA, detailsA], [nameB, detailsB]) => {
-      switch(sortBy) {
-        case "name-asc":
-          return nameA.localeCompare(nameB);
-        case "name-desc":
-          return nameB.localeCompare(nameA);
-        case "time-asc":
-          return detailsA.sortTime - detailsB.sortTime;
-        case "time-desc":
-          return detailsB.sortTime - detailsA.sortTime;
-        case "default":
-        default:
-          return 0;
-      }
-    });
+    // Sort activities (skip sort for "default" to preserve original order)
+    if (sortBy !== "default") {
+      filtered.sort(([nameA, detailsA], [nameB, detailsB]) => {
+        switch (sortBy) {
+          case "name-asc":
+            return nameA.localeCompare(nameB);
+          case "name-desc":
+            return nameB.localeCompare(nameA);
+          case "time-asc":
+            return (detailsA.sortTime ?? 0) - (detailsB.sortTime ?? 0);
+          case "time-desc":
+            return (detailsB.sortTime ?? 0) - (detailsA.sortTime ?? 0);
+          default:
+            return 0;
+        }
+      });
+    }
     
     // Render filtered activities
     renderActivities(Object.fromEntries(filtered));
